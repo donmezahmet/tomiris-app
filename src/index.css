@@ -1,0 +1,291 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+@theme {
+  /* Colors */
+  --color-primary-50: #fdf8e8;
+  --color-primary-100: #f9efc5;
+  --color-primary-200: #f3de8a;
+  --color-primary-300: #e9c84f;
+  --color-primary-400: #d4a853;
+  --color-primary-500: #c4922f;
+  --color-primary-600: #a87324;
+  --color-primary-700: #875520;
+  --color-primary-800: #704522;
+  --color-primary-900: #603b21;
+
+  --color-dark-50: #f0f4f8;
+  --color-dark-100: #d9e2ec;
+  --color-dark-200: #bcccdc;
+  --color-dark-300: #9fb3c8;
+  --color-dark-400: #829ab1;
+  --color-dark-500: #627d98;
+  --color-dark-600: #486581;
+  --color-dark-700: #334e68;
+  --color-dark-800: #243b53;
+  --color-dark-900: #0a1628;
+  --color-dark-950: #060d16;
+
+  --color-emerald-900: #0d3d38;
+  --color-emerald-950: #082825;
+
+  /* Fonts */
+  --font-heading: 'Outfit', sans-serif;
+  --font-body: 'Inter', sans-serif;
+
+  /* Animations */
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-slide-up: slideUp 0.5s ease-out;
+  --animate-fade-in: fadeIn 0.5s ease-out;
+
+  /* Box shadows */
+  --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  --shadow-glass-sm: 0 4px 16px 0 rgba(0, 0, 0, 0.25);
+  --shadow-glow: 0 0 40px rgba(212, 168, 83, 0.3);
+  --shadow-glow-sm: 0 0 20px rgba(212, 168, 83, 0.2);
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes slideUp {
+  0% { transform: translateY(20px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  body {
+    font-family: var(--font-body);
+    background-color: var(--color-dark-900);
+    color: white;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overscroll-behavior-y: none;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+  }
+
+  /* Better touch targets */
+  button, a, input, select, textarea {
+    touch-action: manipulation;
+  }
+
+  /* Prevent zoom on input focus on iOS */
+  @media screen and (max-width: 768px) {
+    input, select, textarea {
+      font-size: 16px !important;
+    }
+  }
+}
+
+@layer components {
+  .glass-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1rem;
+    box-shadow: var(--shadow-glass);
+  }
+  
+  .glass-card-hover {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 1rem;
+    transition: all 0.3s;
+  }
+  
+  .glass-card-hover:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: var(--shadow-glow-sm);
+    transform: translateY(-4px);
+  }
+
+  @media (max-width: 1024px) {
+    .glass-card-hover:hover {
+      transform: none;
+    }
+  }
+  
+  .btn-primary {
+    background-color: var(--color-primary-400);
+    color: var(--color-dark-900);
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    transition: all 0.3s;
+  }
+  
+  .btn-primary:hover {
+    background-color: var(--color-primary-500);
+    box-shadow: var(--shadow-glow);
+  }
+
+  .btn-primary:active {
+    transform: scale(0.98);
+  }
+  
+  .btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-weight: 500;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s;
+  }
+  
+  .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  .btn-secondary:active {
+    transform: scale(0.98);
+  }
+  
+  .btn-ghost {
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    transition: color 0.2s;
+  }
+  
+  .btn-ghost:hover {
+    color: white;
+  }
+  
+  .text-gradient {
+    background: linear-gradient(to right, var(--color-primary-300), var(--color-primary-400), var(--color-primary-500));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  /* Section padding - more generous on desktop */
+  .section-padding {
+    padding: 3rem 1rem;
+  }
+  
+  @media (min-width: 640px) {
+    .section-padding {
+      padding: 4rem 1.5rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .section-padding {
+      padding: 6rem 2rem;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .section-padding {
+      padding: 7rem 2rem;
+    }
+  }
+  
+  /* Wider container for better desktop use */
+  .container-custom {
+    max-width: 84rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .bg-hero-gradient {
+    background: linear-gradient(135deg, var(--color-dark-900) 0%, var(--color-emerald-900) 50%, var(--color-dark-900) 100%);
+  }
+
+  /* Safe area for notched devices */
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  .safe-area-top {
+    padding-top: env(safe-area-inset-top, 0);
+  }
+
+  /* Hide scrollbar for horizontal scroll areas */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Line clamp utilities */
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .line-clamp-4 {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-dark-800);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-dark-600);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-dark-500);
+}
+
+/* Mobile: hide scrollbar completely */
+@media (max-width: 1024px) {
+  ::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+}
+
+/* Smooth scroll for anchor links */
+html {
+  scroll-padding-top: 100px;
+}
+
+@media (max-width: 1024px) {
+  html {
+    scroll-padding-top: 70px;
+  }
+}
