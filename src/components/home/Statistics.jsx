@@ -1,32 +1,57 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Users, FileText, Building2, Award } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
+import { statisticsService } from '../../services/firestore';
 
-const stats = [
+const statsConfig = [
   {
     key: 'customers',
-    value: 'X.XM',
     icon: Users,
   },
   {
     key: 'policies',
-    value: 'XX.XM',
     icon: FileText,
   },
   {
     key: 'partners',
-    value: 'XX',
     icon: Building2,
   },
   {
     key: 'experience',
-    value: 'XX',
     icon: Award,
   },
 ];
 
 export function Statistics() {
   const { t } = useLanguage();
+  const [statsData, setStatsData] = useState({
+    customers: 'X.XM',
+    policies: 'XX.XM',
+    partners: 'XX',
+    experience: 'XX',
+  });
+
+  useEffect(() => {
+    const loadStatistics = async () => {
+      try {
+        const data = await statisticsService.getStatistics();
+        if (data) {
+          setStatsData(data);
+        }
+      } catch (error) {
+        console.error('Error loading statistics from Firestore, using fallback:', error);
+        // Keep using fallback values
+      }
+    };
+
+    loadStatistics();
+  }, []);
+
+  const stats = statsConfig.map((stat) => ({
+    ...stat,
+    value: statsData[stat.key] || 'XX',
+  }));
 
   return (
     <section id="stats" className="py-12 lg:py-24 xl:py-28 relative overflow-hidden">

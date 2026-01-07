@@ -1,6 +1,8 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight, Play, Shield, Car, Heart, Home, Plane, Smartphone } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
+import { statisticsService } from '../../services/firestore';
 import Button from '../ui/Button';
 
 const floatingIcons = [
@@ -14,6 +16,26 @@ const floatingIcons = [
 
 export function Hero() {
   const { t } = useLanguage();
+  const [stats, setStats] = useState({
+    customers: 'X.XM',
+    policies: 'XX.XM',
+    partners: 'XX',
+  });
+
+  useEffect(() => {
+    const loadStats = async () => {
+      try {
+        const data = await statisticsService.getStatistics();
+        if (data) {
+          setStats(data);
+        }
+      } catch (error) {
+        console.error('Error loading statistics from Firestore, using fallback:', error);
+      }
+    };
+
+    loadStats();
+  }, []);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -147,19 +169,19 @@ export function Hero() {
           >
             <div className="text-center">
               <div className="text-2xl sm:text-3xl lg:text-5xl xl:text-6xl font-heading font-bold text-white mb-0.5 lg:mb-2">
-                X.XM+
+                {stats.customers}+
               </div>
               <p className="text-xs sm:text-sm lg:text-base xl:text-lg text-white/50">{t('hero.stats.customers')}</p>
             </div>
             <div className="text-center">
               <div className="text-2xl sm:text-3xl lg:text-5xl xl:text-6xl font-heading font-bold text-white mb-0.5 lg:mb-2">
-                XX.XM+
+                {stats.policies}+
               </div>
               <p className="text-xs sm:text-sm lg:text-base xl:text-lg text-white/50">{t('hero.stats.policies')}</p>
             </div>
             <div className="text-center">
               <div className="text-2xl sm:text-3xl lg:text-5xl xl:text-6xl font-heading font-bold text-white mb-0.5 lg:mb-2">
-                XX+
+                {stats.partners}+
               </div>
               <p className="text-xs sm:text-sm lg:text-base xl:text-lg text-white/50">{t('hero.stats.companies')}</p>
             </div>

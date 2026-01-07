@@ -1,0 +1,41 @@
+// GEÇICI: Import işlemi için güvenlik kuralları
+// Import tamamlandıktan sonra bunları değiştirin!
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // GEÇICI: Import için tüm yazma işlemlerine izin ver
+    // Import tamamlandıktan sonra bunu kaldırın!
+    match /{document=**} {
+      allow read, write: if true;
+    }
+  }
+}
+
+// ⚠️ ÖNEMLİ: Import işlemi tamamlandıktan sonra
+// aşağıdaki kuralları kullanın:
+
+/*
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Public read access for translations
+    match /translations/{document=**} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    
+    // Public read, admin write
+    match /config/{document=**} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    
+    // Admin only
+    match /admin/{document=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
+*/
+

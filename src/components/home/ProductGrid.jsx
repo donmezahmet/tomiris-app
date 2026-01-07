@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { 
@@ -5,9 +6,22 @@ import {
   Smartphone, ArrowRight 
 } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
+import { productsService } from '../../services/firestore';
 import GlassCard from '../ui/GlassCard';
 
-const products = [
+const iconMap = {
+  traffic: Car,
+  kasko: Shield,
+  health: Heart,
+  travel: Plane,
+  dask: Home,
+  home: Home,
+  pet: PawPrint,
+  phone: Smartphone,
+};
+
+// Fallback products
+const fallbackProducts = [
   {
     key: 'traffic',
     icon: Car,
@@ -68,6 +82,27 @@ const products = [
 
 export function ProductGrid() {
   const { t } = useLanguage();
+  const [products, setProducts] = useState(fallbackProducts);
+
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        const firestoreProducts = await productsService.getProducts();
+        if (firestoreProducts && firestoreProducts.length > 0) {
+          const productsWithIcons = firestoreProducts.map((product) => ({
+            ...product,
+            icon: iconMap[product.key] || Car,
+          }));
+          setProducts(productsWithIcons);
+        }
+      } catch (error) {
+        console.error('Error loading products from Firestore, using fallback:', error);
+        // Keep using fallback products
+      }
+    };
+
+    loadProducts();
+  }, []);
 
   const containerVariants = {
     hidden: { opacity: 0 },
